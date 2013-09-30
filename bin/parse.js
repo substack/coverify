@@ -26,10 +26,8 @@ process.stdin.pipe(parse(function (err, sources) {
                     + ', column ' + m.column.join('-')
                     + '\n'
                 );
-                console.log('  ' + s.trim());
+                console.log('  ' + s.trim() + '\n');
             });
-            
-            console.log('\n');
         });
     }
 }));
