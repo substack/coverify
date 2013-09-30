@@ -6,6 +6,6 @@ test('beep boop', function (t) {
     
     foo(function (err, x) {
         if (err) deadCode();
-        t.equal(x, 555);
+        t.equal(x * 5, 555);
     });
 });
