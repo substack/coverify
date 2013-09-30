@@ -10,6 +10,11 @@ else if (argv.o && argv.o !== '@2') {
     output = fs.createWriteStream(argv.o);
 }
 
+var covered = true;
+process.on('exit', function (code) {
+    if (!covered) process.exit(1);
+});
+
 process.stdin.pipe(parse(function (err, sources) {
     if (err) {
         console.error(err);
@@ -23,6 +28,8 @@ process.stdin.pipe(parse(function (err, sources) {
             if (sources[file].length === 0) return;
             
             sources[file].forEach(function (m) {
+                covered = false;
+                
                 var parts = [];
                 parts.push(m.line.slice(0, m.column[0]));
                 parts.push('\x1b[31m\x1b[1m');
