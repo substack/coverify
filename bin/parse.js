@@ -11,18 +11,22 @@ process.stdin.pipe(parse(function (err, sources) {
         Object.keys(sources).forEach(function (file) {
             if (sources[file].length === 0) return;
             
-            console.log(file + '\n');
-            
             sources[file].forEach(function (m) {
                 var parts = [];
-                parts.push(m.line.slice(0, m.lineRange[0]));
+                parts.push(m.line.slice(0, m.column[0]));
                 parts.push('\x1b[31m\x1b[1m');
-                parts.push(m.line.slice(m.lineRange[0], m.lineRange[1]));
+                parts.push(m.line.slice(m.column[0], m.column[1]));
                 parts.push('\x1b[0m');
-                parts.push(m.line.slice(m.lineRange[1]));
+                parts.push(m.line.slice(m.column[1]));
                 
                 var s = parts.join('');
-                console.log(' ' + s.trim());
+                console.log(
+                    '# ' + file
+                    + ': line ' + m.lineNum
+                    + ', column ' + m.column.join('-')
+                    + '\n'
+                );
+                console.log('  ' + s.trim());
             });
             
             console.log('\n');
