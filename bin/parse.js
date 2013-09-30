@@ -1,11 +1,22 @@
 var argv = require('optimist').argv;
+var fs = require('fs');
 var parse = require('../lib/parse.js');
 
+var output = process.stderr;
+if (argv.o === '-' || argv.o === '@1') {
+    output = process.stdout;
+}
+else if (argv.o && argv.o !== '@2') {
+    output = fs.createWriteStream(argv.o);
+}
+
 process.stdin.pipe(parse(function (err, sources) {
-    if (err) return console.error(err);
+    if (err) {
+        console.error(err);
+        process.exit(1);
+    }
     else if (argv.json) {
-        console.log(JSON.stringify(sources, null, 2));
-        return;
+        return output.write(JSON.stringify(sources, null, 2) + '\n');
     }
     else {
         Object.keys(sources).forEach(function (file) {
@@ -20,21 +31,21 @@ process.stdin.pipe(parse(function (err, sources) {
                 parts.push(m.line.slice(m.column[1]));
                 
                 var s = parts.join('');
-                console.log(
+                output.write(
                     '# ' + file
                     + ': line ' + m.lineNum
                     + ', column ' + m.column.join('-')
-                    + '\n'
+                    + '\n\n'
                 );
-                console.log('  ' + s.trim());
+                output.write('  ' + s.trim() + '\n');
                 
                 var xxx = m.line.replace(/\S/g, 'x');
                 var xparts = [];
                 xparts.push(xxx.slice(0, m.column[0] + 1));
                 xparts.push(Array(m.column[1] - m.column[0]).join('^'));
                 var sx = xparts.join('').trim().replace(/x/g, ' ');
-                console.log('  ' + sx + '\n');
+                output.write('  ' + sx + '\n\n');
             });
         });
     }
-}));
+})).pipe(process.stdout);
