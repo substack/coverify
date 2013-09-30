@@ -1,6 +1,31 @@
+var argv = require('optimist').argv;
 var parse = require('../lib/parse.js');
 
 process.stdin.pipe(parse(function (err, sources) {
     if (err) return console.error(err);
-    console.log(JSON.stringify(sources, null, 2));
+    else if (argv.json) {
+        console.log(JSON.stringify(sources, null, 2));
+        return;
+    }
+    else {
+        Object.keys(sources).forEach(function (file) {
+            if (sources[file].length === 0) return;
+            
+            console.log(file + '\n');
+            
+            sources[file].forEach(function (m) {
+                var parts = [];
+                parts.push(m.line.slice(0, m.lineRange[0]));
+                parts.push('\x1b[31m\x1b[1m');
+                parts.push(m.line.slice(m.lineRange[0], m.lineRange[1]));
+                parts.push('\x1b[0m');
+                parts.push(m.line.slice(m.lineRange[1]));
+                
+                var s = parts.join('');
+                console.log(' ' + s.trim());
+            });
+            
+            console.log('\n');
+        });
+    }
 }));
