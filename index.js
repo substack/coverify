@@ -33,7 +33,7 @@ module.exports = function (file, opts) {
             + 'var __coverageWrap = function (index, value) {'
             + 'if (__coverage[index]) ' + outputFn
                 + '("COVERED " + ' + sfile
-                + ' + " [" + __coverage[index] + "]");'
+                + ' + " " + index);'
             + 'delete __coverage[index];'
             + 'return value'
             + '};\n'
