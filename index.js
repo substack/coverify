@@ -1,7 +1,7 @@
 var falafel = require('falafel');
 var concat = require('concat-stream');
-var combine = require('stream-combiner');
-var Readable = require('stream').Readable;
+var duplexer = require('duplexer');
+var through = require('through');
 
 module.exports = function (file, opts) {
     if (typeof file === 'object') {
@@ -11,17 +11,20 @@ module.exports = function (file, opts) {
     if (!opts) opts = {};
     var outputFn = opts.output || 'console.log';
     
-    var output = new Readable;
-    output._read = function () {};
+    var output = through();
     var expected = [];
     
-    return combine(concat(all), output);
+    var chunks = [];
+    return through(write, end);
     
-    function all (body) {
+    function write (buf) { chunks.push(buf) }
+    
+    function end () {
+        var body = Buffer.concat(chunks).toString('utf8');
         var src = falafel(body.toString('utf8'), walk) + '';
         var sfile = JSON.stringify(JSON.stringify(file));
         
-        output.push(
+        this.queue(
             outputFn + '("COVERAGE " + ' + sfile + ' + " " + '
                 + JSON.stringify(JSON.stringify(expected))
             + ');'
@@ -39,8 +42,8 @@ module.exports = function (file, opts) {
             + '};\n'
         );
         
-        output.push(src);
-        output.push(null);
+        this.queue(src);
+        this.queue(null);
     }
     
     function walk (node) {
