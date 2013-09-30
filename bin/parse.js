@@ -26,7 +26,14 @@ process.stdin.pipe(parse(function (err, sources) {
                     + ', column ' + m.column.join('-')
                     + '\n'
                 );
-                console.log('  ' + s.trim() + '\n');
+                console.log('  ' + s.trim());
+                
+                var xxx = m.line.replace(/\S/g, 'x');
+                var xparts = [];
+                xparts.push(xxx.slice(0, m.column[0] + 1));
+                xparts.push(Array(m.column[1] - m.column[0]).join('^'));
+                var sx = xparts.join('').trim().replace(/x/g, ' ');
+                console.log('  ' + sx + '\n');
             });
         });
     }
