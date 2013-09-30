@@ -1,0 +1,35 @@
+{
+  "name": "coverify",
+  "version": "0.0.0",
+  "description": "code coverage browserify transform",
+  "main": "index.js",
+  "bin": {
+    "coverify": "bin/cmd.js"
+  },
+  "dependencies": {
+    "concat-stream": "~1.0.1",
+    "duplexer": "~0.1.1",
+    "falafel": "~0.3.1",
+    "optimist": "~0.6.0",
+    "split": "~0.2.10",
+    "stream-combiner": "~0.0.2",
+    "through": "~2.3.4"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/substack/coverify.git"
+  },
+  "homepage": "https://github.com/substack/coverify",
+  "keywords": [
+    "code",
+    "coverage",
+    "browserify",
+    "test"
+  ],
+  "author": {
+    "name": "James Halliday",
+    "email": "mail@substack.net",
+    "url": "http://substack.net"
+  },
+  "license": "MIT"
+}
