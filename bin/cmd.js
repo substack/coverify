@@ -1,7 +1,18 @@
 #!/usr/bin/env node
 
-var argv = require('optimist').argv;
 var fs = require('fs');
+var argv = require('optimist')
+    .boolean(['q', 'stdout'])
+    .alias({ o: 'output', q: 'quiet' })
+    .default({ q: true })
+    .argv
+;
+
+if (argv.h || argv.help) {
+    fs.createReadStream(__dirname + '/usage.txt').pipe(process.stdout);
+    return;
+}
+
 var parse = require('../parse.js');
 
 var output = process.stderr;
@@ -17,7 +28,7 @@ process.on('exit', function (code) {
     if (!covered) process.exit(1);
 });
 
-process.stdin.pipe(parse(function (err, sources) {
+var parser = parse(function (err, sources) {
     if (err) {
         console.error(err);
         process.exit(1);
@@ -57,4 +68,9 @@ process.stdin.pipe(parse(function (err, sources) {
             });
         });
     }
-})).pipe(process.stdout);
+});
+
+if (argv.stdout || argv.q !== false || (argv.q === undefined && argv.json)) {
+    parser.pipe(process.stdout);
+}
+process.stdin.pipe(parser);
