@@ -1,6 +1,8 @@
+#!/usr/bin/env node
+
 var argv = require('optimist').argv;
 var fs = require('fs');
-var parse = require('../lib/parse.js');
+var parse = require('../parse.js');
 
 var output = process.stderr;
 if (argv.o === '-' || argv.o === '@1') {
