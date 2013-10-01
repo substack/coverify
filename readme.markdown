@@ -130,6 +130,32 @@ Here is some example coverage data that you can generate with `coverify --json`:
 }
 ```
 
+# usage
+
+```
+usage: coverify OPTIONS
+
+OPTIONS are:
+
+  --json
+
+    Suppress normal output and print json coverage data to stdout.
+
+  -q, --quiet
+
+    Don't print non-coverage input back out to stdout.
+
+  --stdout
+
+    Always print non-coverage input back out to stdout.
+
+  -o FILE, --output FILE
+
+    Print coverage data to FILE. Use "@2" for stderr (the default) and "@1" or
+    "-" for stdout.
+
+```
+
 # install
 
 With [npm](https://npmjs.org) do:
