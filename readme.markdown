@@ -72,6 +72,7 @@ results on stderr. Hooray!
 
 ``` js
 var coverify = require('coverify')
+var parse = require('coverify/parse')
 ```
 
 Usually you can just do `browserify -t coverify` to get code coverage but you
@@ -84,6 +85,51 @@ using `console.log()`.
 
 To use a different function from `console.log()`, pass in `opts.output`.
 
+## var stream = parse(cb)
+
+Return a transform stream that accepts test output as input and looks for lines
+starting with `COVERAGE` and `COVERED` to generate a coverage report in
+`cb(err, coverage)`. `coverage` is an object that maps filenames from the bundle
+files to arrays of coverage data. All of the non-`/^(COVERAGE|COVERED)\s/` lines
+are passed through from the input to the output.
+
+Here is some example coverage data that you can generate with `coverify --json`:
+
+```
+{
+  "/home/substack/projects/coverify/example/test.js": [
+    {
+      "range": [
+        158,
+        169
+      ],
+      "lineNum": 7,
+      "column": [
+        16,
+        28
+      ],
+      "line": "        if (err) deadCode();",
+      "code": "deadCode();"
+    }
+  ],
+  "/home/substack/projects/coverify/example/foo.js": [
+    {
+      "range": [
+        123,
+        135
+      ],
+      "lineNum": 3,
+      "column": [
+        35,
+        48
+      ],
+      "line": "        if (i++ === 10 || (false && neverFires())) {",
+      "code": "neverFires()"
+    }
+  ]
+}
+```
+
 # install
 
 With [npm](https://npmjs.org) do:
@@ -92,10 +138,18 @@ With [npm](https://npmjs.org) do:
 npm install coverify
 ```
 
-and then when you compile your tests with browserify you can just do:
+to get the browserify transform module.
+
+When you compile your tests with browserify you can just do:
 
 ```
 browserify -t coverify ...
+```
+
+You will also need the `coverify` command for parsing the test output:
+
+```
+npm install -g coverify
 ```
 
 # license
