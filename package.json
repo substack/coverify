@@ -7,7 +7,6 @@
     "coverify": "bin/cmd.js"
   },
   "dependencies": {
-    "concat-stream": "~1.0.1",
     "duplexer": "~0.1.1",
     "falafel": "~0.3.1",
     "optimist": "~0.6.0",

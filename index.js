@@ -1,5 +1,4 @@
 var falafel = require('falafel');
-var concat = require('concat-stream');
 var duplexer = require('duplexer');
 var through = require('through');
 
