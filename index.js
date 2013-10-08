@@ -1,5 +1,4 @@
 var falafel = require('falafel');
-var duplexer = require('duplexer');
 var through = require('through');
 
 module.exports = function (file, opts) {
