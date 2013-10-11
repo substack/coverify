@@ -63,7 +63,8 @@ module.exports = function (file, opts) {
         }
         else if ((node.type === 'ExpressionStatement'
         || node.type === 'VariableDeclaration')
-        && node.parent.type !== 'ForStatement') {
+        && node.parent.type !== 'ForStatement'
+        && node.parent.type !== 'ForInStatement') {
             node.update(
                 '{ __coverageWrap(' + index + ');'
                 + node.source() + '};'
