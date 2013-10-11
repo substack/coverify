@@ -13,9 +13,15 @@
     "stream-combiner": "~0.0.2",
     "through": "~2.3.4"
   },
+  "devDependencies": {
+    "browserify": "~2.34.0"
+  },
   "repository": {
     "type": "git",
     "url": "git://github.com/substack/coverify.git"
+  },
+  "scripts": {
+    "test": "test/run.sh"
   },
   "homepage": "https://github.com/substack/coverify",
   "keywords": [

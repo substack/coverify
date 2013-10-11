@@ -46,7 +46,14 @@ module.exports = function (file, opts) {
     
     function walk (node) {
         var index = expected.length;
-        if (/Expression$/.test(node.type)
+        if (node.type === 'VariableDeclarator' && node.init) {
+            expected.push(node.init.range);
+            node.init.update(
+                '__coverageWrap(' + index + ','
+                + node.init.source() + ')'
+            );
+        }
+        else if (/Expression$/.test(node.type)
         && node.parent.type !== 'AssignmentExpression'
         && (node.type !== 'MemberExpression'
             || node.parent.type !== 'CallExpression'
@@ -54,9 +61,13 @@ module.exports = function (file, opts) {
             expected.push(node.range);
             node.update('__coverageWrap(' + index + ',' + node.source() + ')');
         }
-        else if (node.type === 'ExpressionStatement'
-        || node.type === 'VariableDeclaration') {
-            node.update('{ __coverageWrap(' + index + ');' + node.source() + '};');
+        else if ((node.type === 'ExpressionStatement'
+        || node.type === 'VariableDeclaration')
+        && node.parent.type !== 'ForStatement') {
+            node.update(
+                '{ __coverageWrap(' + index + ');'
+                + node.source() + '};'
+            );
             expected.push(node.range);
         }
     }
