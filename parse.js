@@ -5,6 +5,7 @@ var fs = require('fs');
 
 module.exports = function (cb) {
     var files = {};
+    var counts = {};
     var original = {};
     
     return combine(split(), through(write, end));
@@ -39,6 +40,14 @@ module.exports = function (cb) {
                     ;
                 });
             });
+            return acc;
+        }, {});
+        
+        var counts = Object.keys(files).reduce(function (acc, file) {
+            acc[file] = {
+                expr: original[file].length - missed[file].length,
+                total: original[file].length
+            };
             return acc;
         }, {});
         
@@ -80,7 +89,7 @@ module.exports = function (cb) {
         
         function next () {
             if (--pending === 0) {
-                cb(null, sources);
+                cb(null, sources, counts);
             }
         }
     }

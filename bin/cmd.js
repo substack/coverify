@@ -5,9 +5,9 @@ var through = require('through');
 
 var minimist = require('minimist');
 var argv = minimist(process.argv.slice(2), {
-    boolean: ['q', 'stdout'],
-    alias: { o: 'output', q: 'quiet' },
-    default: { q: false }
+    boolean: [ 'q', 'stdout', 't' ],
+    alias: { o: 'output', q: 'quiet', t: 'total' },
+    default: { q: false, t: true }
 });
 var vargv = minimist(process.argv.slice(2));
 
@@ -31,10 +31,10 @@ else if (argv.o === undefined && argv.q) {
 
 var covered = true;
 process.on('exit', function (code) {
-    if (!covered) process.exit(1);
+    if (!covered && code === 0) process.exit(1);
 });
 
-var parser = parse(function (err, sources) {
+var parser = parse(function (err, sources, counts) {
     if (err) {
         console.error(err);
         process.exit(1);
@@ -43,8 +43,11 @@ var parser = parse(function (err, sources) {
         return output.write(JSON.stringify(sources, null, 2) + '\n');
     }
     else {
+        var total = { expr: 0, total: 0 };
         Object.keys(sources).forEach(function (file) {
             if (sources[file].length === 0) return;
+            total.expr += counts[file].expr;
+            total.total += counts[file].total;
             
             sources[file].forEach(function (m) {
                 covered = false;
@@ -71,12 +74,16 @@ var parser = parse(function (err, sources) {
                 xparts.push(Array(m.column[1] - m.column[0]).join('^'));
                 var sx = xparts.join('').trim().replace(/x/g, ' ');
                 output.write('  ' + sx + '\n\n');
-                
-                if (!argv.q) {
-                    
-                }
             });
         });
+        
+        if (argv.total || !argv.q) {
+            output.write(
+                '# coverage: '
+                + total.expr + '/' + total.total
+                + ' (' + percent(total.expr, total.total) + '%)\n\n'
+            );
+        }
     }
 });
 
@@ -84,3 +91,10 @@ if (argv.stdout || !argv.q || (vargv.q === undefined && argv.json)) {
     parser.pipe(process.stdout);
 }
 process.stdin.pipe(parser);
+
+function percent (x, total) {
+    if (total === 0) return '0.00';
+    var s = String(Math.floor(x / total * 100 * 100) / 100);
+    if (!/\./.test(s)) s += '.';
+    return s + Array(s.split('.')[1].length + 1).join('0');
+}
