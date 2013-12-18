@@ -2,6 +2,8 @@
 
 code coverage browserify transform
 
+[![testling badge](https://ci.testling.com/substack/coverify.png)](https://ci.testling.com/substack/coverify)
+
 [![build status](https://secure.travis-ci.org/substack/coverify.png)](http://travis-ci.org/substack/coverify)
 
 # example
