@@ -10,6 +10,9 @@ var argv = minimist(process.argv.slice(2), {
     default: { q: false, t: true, c: process.stdout.isTTY }
 });
 var vargv = minimist(process.argv.slice(2));
+if (argv.q && vargv.total === undefined) {
+    argv.total = argv.t = false;
+}
 
 if (argv.h || argv.help) {
     fs.createReadStream(__dirname + '/usage.txt').pipe(process.stdout);
@@ -77,7 +80,7 @@ var parser = parse(function (err, sources, counts) {
             });
         });
         
-        if (argv.total || !argv.q) {
+        if (argv.total) {
             output.write(
                 '# coverage: '
                 + total.expr + '/' + total.total
