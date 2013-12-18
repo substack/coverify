@@ -10,7 +10,7 @@ var argv = minimist(process.argv.slice(2), {
     default: { q: false, t: true, c: process.stdout.isTTY }
 });
 var vargv = minimist(process.argv.slice(2));
-if (argv.q && vargv.total === undefined) {
+if (argv.q && (vargv.total === undefined && vargv.t === undefined)) {
     argv.total = argv.t = false;
 }
 
