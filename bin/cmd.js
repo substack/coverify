@@ -5,9 +5,9 @@ var through = require('through');
 
 var minimist = require('minimist');
 var argv = minimist(process.argv.slice(2), {
-    boolean: [ 'q', 'stdout', 't' ],
+    boolean: [ 'q', 'stdout', 't', 'c' ],
     alias: { o: 'output', q: 'quiet', t: 'total', c: 'color' },
-    default: { q: false, t: true, c: process.stdout.isTTY }
+    default: { q: false, t: true, c: process.stderr.isTTY }
 });
 var vargv = minimist(process.argv.slice(2));
 if (argv.q && (vargv.total === undefined && vargv.t === undefined)) {
@@ -84,10 +84,11 @@ var parser = parse(function (err, sources, counts) {
         });
         
         if (argv.total) {
+            var p = percent(total.expr, total.total);
             output.write(
                 '# coverage: '
                 + total.expr + '/' + total.total
-                + ' (' + percent(total.expr, total.total) + '%)\n\n'
+                + ' (' + colorify(p) + ' %)\n\n'
             );
         }
     }
@@ -102,5 +103,14 @@ function percent (x, total) {
     if (total === 0) return '0.00';
     var s = String(Math.floor(x / total * 100 * 100) / 100);
     if (!/\./.test(s)) s += '.';
-    return s + Array(s.split('.')[1].length + 1).join('0');
+    return s + Array(2 - s.split('.')[1].length + 1).join('0');
+}
+
+function colorify (p) {
+    if (argv.color === false) return p;
+    var c = p === '100.00'
+        ? '\x1b[32m\x1b[1m'
+        : '\x1b[31m\x1b[1m'
+    ;
+    return c + p + '\x1b[0m';
 }
