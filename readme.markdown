@@ -39,7 +39,6 @@ Now with [browserify](http://browserify.org) and
 
 ```
 $ browserify -t coverify example/test.js | testling | coverify; echo EXIT CODE: $?
-
 TAP version 13
 # beep boop
 ok 1 should be equal
@@ -59,6 +58,8 @@ ok 1 should be equal
 
   if (i++ === 10 || (false && neverFires())) {
                               ^^^^^^^^^^^^
+
+# coverage: 34/36 (94.4400%)
 
 EXIT CODE: 1
 ```
@@ -143,7 +144,12 @@ OPTIONS are:
 
   -q, --quiet
 
-    Don't print non-coverage input back out to stdout.
+    Don't print non-coverage input back out to stdout and print coverage
+    output to stdout instead of stderr.
+
+  -c, --color
+
+    Use color in the output. Default: true if stdout is a TTY.
 
   --stdout
 
@@ -151,8 +157,8 @@ OPTIONS are:
 
   -o FILE, --output FILE
 
-    Print coverage data to FILE. Use "@2" for stderr (the default) and "@1" or
-    "-" for stdout.
+    Print coverage data to FILE. Use "@2" for stderr (the default) and
+    "@1" or "-" for stdout.
 
 ```
 

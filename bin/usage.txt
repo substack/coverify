@@ -11,6 +11,10 @@ OPTIONS are:
     Don't print non-coverage input back out to stdout and print coverage
     output to stdout instead of stderr.
 
+  -c, --color
+
+    Use color in the output. Default: true if stdout is a TTY.
+
   --stdout
 
     Always print non-coverage input back out to stdout.

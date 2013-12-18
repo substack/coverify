@@ -6,8 +6,8 @@ var through = require('through');
 var minimist = require('minimist');
 var argv = minimist(process.argv.slice(2), {
     boolean: [ 'q', 'stdout', 't' ],
-    alias: { o: 'output', q: 'quiet', t: 'total' },
-    default: { q: false, t: true }
+    alias: { o: 'output', q: 'quiet', t: 'total', c: 'color' },
+    default: { q: false, t: true, c: process.stdout.isTTY }
 });
 var vargv = minimist(process.argv.slice(2));
 
@@ -54,9 +54,9 @@ var parser = parse(function (err, sources, counts) {
                 
                 var parts = [];
                 parts.push(m.line.slice(0, m.column[0]));
-                parts.push('\x1b[31m\x1b[1m');
+                if (argv.color) parts.push('\x1b[31m\x1b[1m');
                 parts.push(m.line.slice(m.column[0], m.column[1]));
-                parts.push('\x1b[0m');
+                if (argv.color) parts.push('\x1b[0m');
                 parts.push(m.line.slice(m.column[1]));
                 
                 var s = parts.join('');
