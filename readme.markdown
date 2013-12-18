@@ -2,6 +2,8 @@
 
 code coverage browserify transform
 
+[![build status](https://secure.travis-ci.org/substack/coverify.png)](http://travis-ci.org/substack/coverify)
+
 # example
 
 Suppose we have a test.js:
