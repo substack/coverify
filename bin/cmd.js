@@ -25,6 +25,9 @@ if (argv.o === '-' || argv.o === '@1') {
 else if (argv.o && argv.o !== '@2') {
     output = fs.createWriteStream(argv.o);
 }
+else if (argv.o === undefined && argv.q) {
+    output = process.stdout;
+}
 
 var covered = true;
 process.on('exit', function (code) {
@@ -69,7 +72,7 @@ var parser = parse(function (err, sources) {
                 var sx = xparts.join('').trim().replace(/x/g, ' ');
                 output.write('  ' + sx + '\n\n');
                 
-                if (argv.q) {
+                if (!argv.q) {
                     
                 }
             });

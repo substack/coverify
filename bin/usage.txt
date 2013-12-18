@@ -8,7 +8,8 @@ OPTIONS are:
 
   -q, --quiet
 
-    Don't print non-coverage input back out to stdout.
+    Don't print non-coverage input back out to stdout and print coverage
+    output to stdout instead of stderr.
 
   --stdout
 
@@ -16,6 +17,6 @@ OPTIONS are:
 
   -o FILE, --output FILE
 
-    Print coverage data to FILE. Use "@2" for stderr (the default) and "@1" or
-    "-" for stdout.
+    Print coverage data to FILE. Use "@2" for stderr (the default) and
+    "@1" or "-" for stdout.
 
