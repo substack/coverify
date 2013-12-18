@@ -1,12 +1,15 @@
 #!/usr/bin/env node
 
 var fs = require('fs');
-var argv = require('optimist')
-    .boolean(['q', 'stdout'])
-    .alias({ o: 'output', q: 'quiet' })
-    .default({ q: true })
-    .argv
-;
+var through = require('through');
+
+var minimist = require('minimist');
+var argv = minimist(process.argv.slice(2), {
+    boolean: ['q', 'stdout'],
+    alias: { o: 'output', q: 'quiet' },
+    default: { q: false }
+});
+var vargv = minimist(process.argv.slice(2));
 
 if (argv.h || argv.help) {
     fs.createReadStream(__dirname + '/usage.txt').pipe(process.stdout);
@@ -65,12 +68,16 @@ var parser = parse(function (err, sources) {
                 xparts.push(Array(m.column[1] - m.column[0]).join('^'));
                 var sx = xparts.join('').trim().replace(/x/g, ' ');
                 output.write('  ' + sx + '\n\n');
+                
+                if (argv.q) {
+                    
+                }
             });
         });
     }
 });
 
-if (argv.stdout || argv.q !== false || (argv.q === undefined && argv.json)) {
+if (argv.stdout || !argv.q || (vargv.q === undefined && argv.json)) {
     parser.pipe(process.stdout);
 }
 process.stdin.pipe(parser);
