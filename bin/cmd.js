@@ -47,10 +47,13 @@ var parser = parse(function (err, sources, counts) {
     }
     else {
         var total = { expr: 0, total: 0 };
-        Object.keys(sources).forEach(function (file) {
-            if (sources[file].length === 0) return;
+        Object.keys(counts).forEach(function (file) {
             total.expr += counts[file].expr;
             total.total += counts[file].total;
+        });
+        
+        Object.keys(sources).forEach(function (file) {
+            if (sources[file].length === 0) return;
             
             sources[file].forEach(function (m) {
                 covered = false;
