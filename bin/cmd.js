@@ -55,16 +55,30 @@ var parser = parse(function (err, sources, counts) {
         Object.keys(sources).forEach(function (file) {
             if (sources[file].length === 0) return;
             
+            var lines = {};
             sources[file].forEach(function (m) {
                 covered = false;
+                if (!lines[m.line]) lines[m.line] = [];
+                lines[m.line].push(m);
+            });
+            
+            Object.keys(lines).forEach(function (ix) {
+                var line = lines[ix];
                 
                 var parts = [];
-                parts.push(m.line.slice(0, m.column[0]));
-                if (argv.color) parts.push('\x1b[31m\x1b[1m');
-                parts.push(m.line.slice(m.column[0], m.column[1]));
-                if (argv.color) parts.push('\x1b[0m');
-                parts.push(m.line.slice(m.column[1]));
+                var index = 0;
+                line.forEach(function (m) {
+                    parts.push(m.line.slice(index, m.column[0]));
+                    if (argv.color) parts.push('\x1b[31m\x1b[1m');
+                    parts.push(m.line.slice(m.column[0], m.column[1]));
+                    if (argv.color) parts.push('\x1b[0m');
+                    index = m.column[1];
+                });
+                if (line.length) {
+                    parts.push(line[0].line.slice(index));
+                }
                 
+                var m = line[0];
                 var s = parts.join('');
                 output.write(
                     '# ' + file
