@@ -66,17 +66,15 @@ var parser = parse(function (err, sources, counts) {
                 var line = lines[ix];
                 
                 var parts = [];
-                var index = 0;
+                var pindex = 0;
                 line.forEach(function (m) {
-                    parts.push(m.line.slice(index, m.column[0]));
+                    parts.push(m.line.slice(pindex, m.column[0]));
                     if (argv.color) parts.push('\x1b[31m\x1b[1m');
                     parts.push(m.line.slice(m.column[0], m.column[1]));
                     if (argv.color) parts.push('\x1b[0m');
-                    index = m.column[1];
+                    pindex = m.column[1];
                 });
-                if (line.length) {
-                    parts.push(line[0].line.slice(index));
-                }
+                parts.push(line[0].line.slice(pindex));
                 
                 var m = line[0];
                 var s = parts.join('');
@@ -90,8 +88,14 @@ var parser = parse(function (err, sources, counts) {
                 
                 var xxx = m.line.replace(/\S/g, 'x');
                 var xparts = [];
-                xparts.push(xxx.slice(0, m.column[0] + 1));
-                xparts.push(Array(m.column[1] - m.column[0]).join('^'));
+                var xindex = 0;
+                
+                line.forEach(function (m) {
+                    xparts.push(xxx.slice(xindex, m.column[0] + 1));
+                    xparts.push(Array(m.column[1] - m.column[0]).join('^'));
+                    xindex = m.column[1];
+                });
+                
                 var sx = xparts.join('').trim().replace(/x/g, ' ');
                 output.write('  ' + sx + '\n\n');
             });
