@@ -68,9 +68,9 @@ var parser = parse(function (err, sources, counts) {
                 var parts = [];
                 var pindex = 0;
                 line.forEach(function (m) {
-                    parts.push(m.line.slice(pindex, m.column[0]));
+                    parts.push(m.line.slice(pindex, m.column[0] + 1));
                     if (argv.color) parts.push('\x1b[31m\x1b[1m');
-                    parts.push(m.line.slice(m.column[0], m.column[1]));
+                    parts.push(m.line.slice(m.column[0] + 1, m.column[1]));
                     if (argv.color) parts.push('\x1b[0m');
                     pindex = m.column[1];
                 });
