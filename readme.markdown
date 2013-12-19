@@ -38,11 +38,10 @@ module.exports = function (cb) {
 };
 ```
 
-Now with [browserify](http://browserify.org) and
-[testling](https://npmjs.org/package/testling) we can do:
+Now with [browserify](http://browserify.org) just do:
 
 ```
-$ browserify -t coverify example/test.js | testling | coverify; echo EXIT CODE: $?
+$ browserify -t coverify example/test.js --bare | node | coverify
 TAP version 13
 # beep boop
 ok 1 should be equal
@@ -65,13 +64,29 @@ ok 1 should be equal
 
 # coverage: 34/36 (94.4400%)
 
-EXIT CODE: 1
 ```
 
 `browserify` compiled our `test.js` file, then `testling` ran our code in a
 local headless browser (we also could have used `node`), and then `coverify`
 parsed the test output for code coverage data and printed some nicely formatted
 results on stderr. Hooray!
+
+and the exit code is non-zero because the coverage wasn't 100%:
+
+```
+$ echo $?
+1
+```
+
+If you want to run code coverage for browser tests, you can use the
+[testling](https://npmjs.org/package/testling) command:
+
+```
+$ browserify -t coverify example/test.js | testling | coverify
+```
+
+and the output and exit codes work exactly the same, except the code is running
+in a browser instead of node.
 
 # methods
 
