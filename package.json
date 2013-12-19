@@ -14,7 +14,8 @@
     "through": "~2.3.4"
   },
   "devDependencies": {
-    "browserify": "~3.4.1"
+    "browserify": "~3.4.1",
+    "tape": "~1.1.0"
   },
   "repository": {
     "type": "git",
