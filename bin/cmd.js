@@ -81,7 +81,9 @@ var parser = parse(function (err, sources, counts) {
                 output.write(
                     '# ' + file
                     + ': line ' + m.lineNum
-                    + ', column ' + m.column.join('-')
+                    + ', column ' + line.map(function (m) {
+                        return m.column.join('-')
+                    }).join(', ')
                     + '\n\n'
                 );
                 output.write('  ' + s.trim() + '\n');
