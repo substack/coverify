@@ -94,9 +94,17 @@ To use a different function from `console.log()`, pass in `opts.output`.
 
 Return a transform stream that accepts test output as input and looks for lines
 starting with `COVERAGE` and `COVERED` to generate a coverage report in
-`cb(err, coverage)`. `coverage` is an object that maps filenames from the bundle
-files to arrays of coverage data. All of the non-`/^(COVERAGE|COVERED)\s/` lines
-are passed through from the input to the output.
+`cb(err, coverage, counts)`.
+
+`coverage` is an object that maps filenames from the bundle files to arrays of
+coverage data.
+
+`counts` is an object mapping filenames to objects with `expr` and `total`
+fields for how many expressions were covered and how many expressions were
+present.
+
+All of the non-`/^(COVERAGE|COVERED)\s/` lines are passed through from the input
+to the output.
 
 Here is some example coverage data that you can generate with `coverify --json`:
 
