@@ -65,10 +65,11 @@ module.exports = function (file, opts) {
         || node.type === 'VariableDeclaration')
         && node.parent.type !== 'ForStatement'
         && node.parent.type !== 'ForInStatement') {
-            node.update(
-                '{ __coverageWrap(' + index + ');'
-                + node.source() + '};'
-            );
+            var s = '{ __coverageWrap(' + index + ');' + node.source() + '}';
+            if (node.parent.type === 'IfStatement') {
+                node.update(s);
+            }
+            else node.update(s + ';');
             expected.push(node.range);
         }
     }
