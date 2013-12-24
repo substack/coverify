@@ -13,13 +13,15 @@ module.exports = function (file, opts) {
     var expected = [];
     
     var chunks = [];
-    return through(write, end);
+    var stream = through(write, end);
+    return stream;
     
     function write (buf) { chunks.push(buf) }
     
     function end () {
         var body = Buffer.concat(chunks).toString('utf8');
-        var src = falafel(body.toString('utf8'), walk) + '';
+        try { var src = falafel(body, walk) + '' }
+        catch (err) { return onerror(err, body) }
         var sfile = JSON.stringify(JSON.stringify(file));
         
         this.queue(
@@ -72,5 +74,13 @@ module.exports = function (file, opts) {
             else node.update(s + ';');
             expected.push(node.range);
         }
+    }
+    
+    function onerror (err, body) {
+        if (err.lineNumber !== undefined) {
+            var lines = body.split('\n');
+            err.line = lines[err.lineNumber-1];
+        }
+        return stream.emit('error', err);
     }
 };
