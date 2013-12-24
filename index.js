@@ -21,7 +21,7 @@ module.exports = function (file, opts) {
     function end () {
         var body = Buffer.concat(chunks).toString('utf8');
         try { var src = falafel(body, walk) + '' }
-        catch (err) { return onerror(err, body) }
+        catch (err) { return onerror(err, file,body) }
         var sfile = JSON.stringify(JSON.stringify(file));
         
         this.queue(
@@ -76,11 +76,22 @@ module.exports = function (file, opts) {
         }
     }
     
-    function onerror (err, body) {
-        if (err.lineNumber !== undefined) {
+    function onerror (err, file, body) {
+        if (err && err.lineNumber !== undefined) {
             var lines = body.split('\n');
-            err.line = lines[err.lineNumber-1];
+            var line = lines[err.lineNumber-1];
+            
+            var msg = err.description + '\n\n'
+                + file + ':' + err.lineNumber + '\n'
+                + line + '\n'
+                + Array(err.column).join(' ') + '^'
+            ;
+            var e = new Error(msg);
+            e.lineNumber = err.lineNumber;
+            e.column = err.column;
+            e.line = line;
+            stream.emit('error', e);
         }
-        return stream.emit('error', err);
+        else stream.emit('error', err);
     }
 };
