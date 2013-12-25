@@ -19,7 +19,10 @@ module.exports = function (file, opts) {
     function write (buf) { chunks.push(buf) }
     
     function end () {
-        var body = Buffer.concat(chunks).toString('utf8');
+        var body = Buffer.concat(chunks)
+            .toString('utf8')
+            .replace(/^#!/, '//#!')
+        ;
         try { var src = falafel(body, walk) + '' }
         catch (err) { return onerror(err, file,body) }
         var sfile = JSON.stringify(JSON.stringify(file));
