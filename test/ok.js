@@ -26,6 +26,15 @@ test('ok ok (shim)', function (t) {
     });
 });
 
+test('throws', function (t) {
+    t.plan(1);
+    t.throws(function () {
+        (function () {
+            return undefined;
+        })().blah
+    });
+});
+
 function forEach (xs, f) {
     if (xs.forEach) return xs.forEach(f);
     for (var i = 0; i < xs.length; i++) {
