@@ -69,6 +69,10 @@ var parser = parse(function (err, sources, counts) {
                 var column = 0;
                 var str;
                 
+                var xxx = line[0].line.replace(/\S/g, 'x');
+                var xparts = [];
+                var xindex = 0;
+                
                 line.forEach(function (m) {
                     m.lines.forEach(function (row, ix) {
                         str = row.line;
@@ -83,31 +87,23 @@ var parser = parse(function (err, sources, counts) {
                         
                         column = r[1] + 1;
                     });
-                });
-                parts.push(str.slice(column));
-                
-                var m = line[0];
-                var s = parts.join('');
-                output.write(
-                    '# ' + file
-                    + ': line ' + (m.lineNum + 1)
-                    + ', column ' + line.map(function (m) {
-                        return (m.column[0] + 2) + '-' + m.column[1];
-                    }).join(', ')
-                    + '\n\n'
-                );
-                output.write('  ' + s + '\n');
-                
-                var xxx = m.line.replace(/\S/g, 'x');
-                var xparts = [];
-                var xindex = 0;
-                
-                line.forEach(function (m) {
+                    
                     xparts.push(xxx.slice(xindex, m.column[0] + 1));
                     xparts.push(Array(m.column[1] - m.column[0]).join('^'));
                     xindex = m.column[1];
                 });
+                parts.push(str.slice(column));
                 
+                var s = parts.join('');
+                output.write(
+                    '# ' + file
+                    + ': line ' + (line[0].lineNum + 1)
+                    + ', column ' + line.map(function (m) {
+                        return (line[0].column[0] + 2) + '-' + line[0].column[1];
+                    }).join(', ')
+                    + '\n\n'
+                );
+                output.write('  ' + s + '\n');
                 var sx = xparts.join('').replace(/x/g, ' ');
                 output.write('  ' + sx + '\n\n');
             });
