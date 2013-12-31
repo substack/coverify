@@ -74,11 +74,11 @@ var parser = parse(function (err, sources, counts) {
                         str = row.line;
                         var r = row.range;
                         
-                        if (ix > 0) parts.push('\n');
+                        if (ix > 0) parts.push('\n  ');
                         
-                        parts.push(str.slice(column, r[0] + 1));
+                        parts.push(str.slice(column, r[0]));
                         if (argv.color) parts.push('\x1b[31m\x1b[1m');
-                        parts.push(str.slice(r[0] + 1, r[1] + 1));
+                        parts.push(str.slice(r[0], r[1] + 1));
                         if (argv.color) parts.push('\x1b[0m');
                         
                         column = r[1] + 1;
@@ -96,7 +96,7 @@ var parser = parse(function (err, sources, counts) {
                     }).join(', ')
                     + '\n\n'
                 );
-                output.write('  ' + s.trim() + '\n');
+                output.write('  ' + s + '\n');
                 
                 var xxx = m.line.replace(/\S/g, 'x');
                 var xparts = [];
@@ -108,7 +108,7 @@ var parser = parse(function (err, sources, counts) {
                     xindex = m.column[1];
                 });
                 
-                var sx = xparts.join('').trim().replace(/x/g, ' ');
+                var sx = xparts.join('').replace(/x/g, ' ');
                 output.write('  ' + sx + '\n\n');
             });
         });
