@@ -26,6 +26,15 @@ test('ok ok (shim)', function (t) {
     });
 });
 
+test('assignment', function (t) {
+    t.plan(3);
+    
+    var obj = { a: 1, b: 2 };
+    t.equal(obj.a --, 1);
+    t.equal(++ obj.b, 3);
+    t.equal((obj.c = 5) * 2, 10);
+});
+
 test('throws expression', function (t) {
     t.plan(1);
     t.throws(function () {
