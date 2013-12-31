@@ -36,12 +36,12 @@ module.exports = function (file, opts) {
                 acc[ix] = x;
                 return acc;
             }, {})) + ';'
-            + 'var __coverageWrap = function (index, value) {'
+            + 'var __coverageWrap = function (index) {'
             + 'if (__coverage[index]) ' + outputFn
                 + '("COVERED " + ' + sfile
                 + ' + " " + index);'
             + 'delete __coverage[index];'
-            + 'return value'
+            + 'return function (x) { return x }'
             + '};\n'
         );
         
@@ -54,8 +54,8 @@ module.exports = function (file, opts) {
         if (node.type === 'VariableDeclarator' && node.init) {
             expected.push(node.init.range);
             node.init.update(
-                '__coverageWrap(' + index + ','
-                + node.init.source() + ')'
+                '(__coverageWrap(' + index + ')('
+                + node.init.source() + '))'
             );
         }
         else if (/Expression$/.test(node.type)
@@ -64,7 +64,7 @@ module.exports = function (file, opts) {
             || node.parent.type !== 'CallExpression'
         )) {
             expected.push(node.range);
-            node.update('__coverageWrap(' + index + ',' + node.source() + ')');
+            node.update('(__coverageWrap(' + index + ')(' + node.source() + '))');
         }
         else if ((node.type === 'ExpressionStatement'
         || node.type === 'VariableDeclaration')
