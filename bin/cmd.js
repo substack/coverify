@@ -69,9 +69,7 @@ var parser = parse(function (err, sources, counts) {
                 var column = 0;
                 var str;
                 
-                var xxx = line[0].line.replace(/\S/g, 'x');
-                var xparts = [];
-                var xindex = 0;
+                var xxx = '';
                 
                 line.forEach(function (m) {
                     m.lines.forEach(function (row, ix) {
@@ -86,11 +84,23 @@ var parser = parse(function (err, sources, counts) {
                         if (argv.color) parts.push('\x1b[0m');
                         
                         column = r[1] + 1;
+                        
+                        if (str.length > xxx.length) {
+                            xxx += Array(str.length - xxx.length + 1).join('x');
+                        }
+                        
+                        var a = r[0], b = r[1];
+                        if (ix > 0) {
+                            var ma = /\S/.exec(str);
+                            a = ma ? ma.index - 1 : 0;
+                        }
+                        
+                        var rep = Array(b - a + 1).join('^');
+                        
+                        var xparts = xxx.split('');
+                        xparts.splice(a + 1, b - a, rep);
+                        xxx = xparts.join('');
                     });
-                    
-                    xparts.push(xxx.slice(xindex, m.column[0] + 1));
-                    xparts.push(Array(m.column[1] - m.column[0]).join('^'));
-                    xindex = m.column[1];
                 });
                 parts.push(str.slice(column));
                 
@@ -104,8 +114,7 @@ var parser = parse(function (err, sources, counts) {
                     + '\n\n'
                 );
                 output.write('  ' + s + '\n');
-                var sx = xparts.join('').replace(/x/g, ' ');
-                output.write('  ' + sx + '\n\n');
+                output.write('  ' + xxx.replace(/x/g, ' ') + '\n\n');
             });
         });
         
