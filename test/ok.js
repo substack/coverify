@@ -27,7 +27,7 @@ test('ok ok (shim)', function (t) {
 });
 
 test('assignment', function (t) {
-    t.plan(3);
+    t.plan(2);
     
     var obj = { a: 1, b: 2 };
     t.equal(obj.a --, 1);
@@ -41,6 +41,7 @@ test('throws expression', function (t) {
         undefined.blah;
     });
 });
+
 test('throws function', function (t) {
     t.plan(1);
     t.throws(function () {
