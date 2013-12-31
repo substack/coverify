@@ -69,7 +69,7 @@ module.exports = function (cb) {
                         if (c < r[0]) continue;
                         
                         var row = { line: lines[i] };
-                        row.range = [ 0, lines[i].length ];
+                        row.range = [ 0, lines[i].length - 1 ];
                         if (mlines.length === 0) {
                             row.range[0] = r[0] - c + lines[i].length;
                         }
