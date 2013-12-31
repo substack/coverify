@@ -27,7 +27,7 @@ test('ok ok (shim)', function (t) {
 });
 
 test('assignment', function (t) {
-    t.plan(2);
+    t.plan(3);
     
     var obj = { a: 1, b: 2 };
     t.equal(obj.a --, 1);
