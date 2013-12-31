@@ -84,7 +84,7 @@ var parser = parse(function (err, sources, counts) {
                         column = r[1] + 1;
                     });
                 });
-                parts.push(str.slice(column + 1));
+                parts.push(str.slice(column));
                 
                 var m = line[0];
                 var s = parts.join('');
