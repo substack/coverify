@@ -63,13 +63,30 @@ module.exports = function (cb) {
                 var lines = src.split('\n');
                 function findLine (r) {
                     var c = 0;
+                    var mlines = [];
                     for (var i = 0; i < lines.length; i++) {
                         c += lines[i].length + 1;
-                        if (c > r[0]) break;
+                        if (c < r[0]) continue;
+                        
+                        var row = { line: lines[i] };
+                        row.range = [ 0, lines[i].length ];
+                        if (mlines.length === 0) {
+                            row.range[0] = c - r[0];
+                        }
+                        if (c > r[1]) {
+                            row.range[1] = c - r[1];
+                        }
+                        mlines.push(row);
+                        
+                        if (c > r[1]) break;
                     }
                     var offset =  c - lines[i].length;
                     var lr = [ r[0] - offset, r[1] - offset + 1 ];
-                    return { num: i, range: lr };
+                    return {
+                        lines: mlines,
+                        num: i, // DEPRECATE
+                        range: lr
+                    };
                 }
                 
                 sources[file] = [];
@@ -77,9 +94,10 @@ module.exports = function (cb) {
                     var match = findLine(range);
                     sources[file].push({
                         range: range,
-                        lineNum: match.num,
-                        column: match.range,
-                        line: lines[match.num],
+                        lines: match.lines,
+                        lineNum: match.num, // DEPRECATE
+                        column: match.range, // DEPRECATE
+                        line: lines[match.num], // DEPRECATE
                         code: src.slice(range[0], range[1])
                     });
                 });
