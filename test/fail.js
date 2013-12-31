@@ -15,7 +15,8 @@ test('not covered', function (t) {
     });
 });
 
-/*
+test('whatever', whatever);
+
 function whatever (t) {
     t.plan(1);
     t.throws(function () {
@@ -26,7 +27,6 @@ function whatever (t) {
         })().blah
     });
 }
-*/
 
 function forEach (xs, f) {
     if (xs.forEach) return xs.forEach(f);

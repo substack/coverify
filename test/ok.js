@@ -26,16 +26,21 @@ test('ok ok (shim)', function (t) {
     });
 });
 
-/*
-test('throws', function (t) {
+test('throws expression', function (t) {
+    t.plan(1);
+    t.throws(function () {
+        undefined.blah;
+    });
+});
+test('throws function', function (t) {
     t.plan(1);
     t.throws(function () {
         (function () {
+            1 + 2;
             return undefined;
         })().blah
     });
 });
-*/
 
 function forEach (xs, f) {
     if (xs.forEach) return xs.forEach(f);
