@@ -71,10 +71,10 @@ module.exports = function (cb) {
                         var row = { line: lines[i] };
                         row.range = [ 0, lines[i].length ];
                         if (mlines.length === 0) {
-                            row.range[0] = c - r[0];
+                            row.range[0] = r[0] - c + lines[i].length;
                         }
                         if (c > r[1]) {
-                            row.range[1] = c - r[1];
+                            row.range[1] = r[1] - c + lines[i].length;
                         }
                         mlines.push(row);
                         

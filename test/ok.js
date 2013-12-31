@@ -26,6 +26,7 @@ test('ok ok (shim)', function (t) {
     });
 });
 
+/*
 test('throws', function (t) {
     t.plan(1);
     t.throws(function () {
@@ -34,6 +35,7 @@ test('throws', function (t) {
         })().blah
     });
 });
+*/
 
 function forEach (xs, f) {
     if (xs.forEach) return xs.forEach(f);

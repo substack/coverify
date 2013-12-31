@@ -65,17 +65,26 @@ var parser = parse(function (err, sources, counts) {
             
             Object.keys(lines).forEach(function (ix) {
                 var line = lines[ix];
-                
                 var parts = [];
-                var pindex = 0;
+                var column = 0;
+                var str;
+                
                 line.forEach(function (m) {
-                    parts.push(m.line.slice(pindex, m.column[0] + 1));
-                    if (argv.color) parts.push('\x1b[31m\x1b[1m');
-                    parts.push(m.line.slice(m.column[0] + 1, m.column[1]));
-                    if (argv.color) parts.push('\x1b[0m');
-                    pindex = m.column[1];
+                    m.lines.forEach(function (row, ix) {
+                        str = row.line;
+                        var r = row.range;
+                        
+                        if (ix > 0) parts.push('\n');
+                        
+                        parts.push(str.slice(column, r[0] + 1));
+                        if (argv.color) parts.push('\x1b[31m\x1b[1m');
+                        parts.push(str.slice(r[0] + 1, r[1] + 1));
+                        if (argv.color) parts.push('\x1b[0m');
+                        
+                        column = r[1] + 1;
+                    });
                 });
-                parts.push(line[0].line.slice(pindex));
+                parts.push(str.slice(column + 1));
                 
                 var m = line[0];
                 var s = parts.join('');
