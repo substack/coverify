@@ -41,10 +41,8 @@
     "files": "test/ok.js",
     "browsers": [
       "ie/8..latest",
-      "firefox/16..latest",
-      "firefox/nightly",
-      "chrome/22..latest",
-      "chrome/canary",
+      "firefox/3.5", "firefox/latest", "firefox/nightly",
+      "chrome/10", "chrome/latest", "chrome/canary",
       "opera/12..latest",
       "opera/next",
       "safari/5.1..latest",
