@@ -79,9 +79,9 @@ module.exports = function (file, opts) {
             expected.push(node.range);
         }
         else if (node.type === 'ReturnStatement') {
-          node.update('return __coverageWrap(' + index + ')(function () {'
-              + node.source() + '})();');
-          expected.push(node.range);
+            node.update('return __coverageWrap(' + index + ')(function () {'
+                + node.source() + '})();');
+            expected.push(node.range);
         }
     }
     
