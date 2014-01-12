@@ -78,6 +78,11 @@ module.exports = function (file, opts) {
             else node.update(s + ';');
             expected.push(node.range);
         }
+        else if (node.type === 'ReturnStatement') {
+          node.update('return __coverageWrap(' + index + ')(function () {'
+              + node.source() + '})();');
+          expected.push(node.range);
+        }
     }
     
     function onerror (err, file, body) {
