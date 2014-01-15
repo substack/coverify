@@ -59,6 +59,7 @@ module.exports = function (file, opts) {
             );
         }
         else if (/Expression$/.test(node.type)
+        && node.parent.type !== 'UnaryExpression'
         && node.parent.type !== 'AssignmentExpression'
         && node.parent.type !== 'UpdateExpression'
         && (node.type !== 'MemberExpression'
