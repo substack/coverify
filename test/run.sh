@@ -11,4 +11,7 @@ browserify test/fail-return.js | node | bin/cmd.js \
 browserify test/fail-delete | node | bin/cmd.js \
     && echo FAIL test/fail-delete && exit 1
 
+browserify test/fail-scope | node | bin/cmd.js \
+    && echo FAIL test/fail-scope && exit 1
+
 echo OK
