@@ -29,6 +29,7 @@
     "code",
     "coverage",
     "browserify",
+    "browserify-transform",
     "test"
   ],
   "author": {
