@@ -1,4 +1,5 @@
 var test = require('tape');
+var pkg = require('./package.json');
 
 test('ok ok', function (t) {
     t.plan(3);

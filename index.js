@@ -23,6 +23,13 @@ module.exports = function (file, opts) {
             .toString('utf8')
             .replace(/^#!/, '//#!')
         ;
+
+        if (file.match(/\.json$/)) {
+            this.queue('module.exports=' + body);
+            this.queue(null);
+            return;
+        }
+
         try { var src = falafel(body, walk) + '' }
         catch (err) { return onerror(err, file,body) }
         var sfile = JSON.stringify(JSON.stringify(file));
