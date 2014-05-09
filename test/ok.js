@@ -53,6 +53,14 @@ test('throws function', function (t) {
     });
 });
 
+test('return arguments', function (t) {
+    t.plan(1);
+
+    t.equal((function () {
+        return arguments[0]
+    })(5), 5)
+});
+
 function forEach (xs, f) {
     if (xs.forEach) return xs.forEach(f);
     for (var i = 0; i < xs.length; i++) {
