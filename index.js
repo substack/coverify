@@ -88,7 +88,7 @@ module.exports = function (file, opts) {
         }
         else if (node.type === 'ReturnStatement') {
             node.update('return __coverageWrap(' + index + ')(function () {'
-                + node.source() + '}).apply(this, arguments);');
+                + node.source() + '}).apply(this, [].slice.call(arguments));');
             expected.push(node.range);
         }
     }
