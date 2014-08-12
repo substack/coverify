@@ -14,4 +14,7 @@ browserify test/fail-delete | node | bin/cmd.js \
 browserify test/fail-scope | node | bin/cmd.js \
     && echo FAIL test/fail-scope && exit 1
 
+browserify test/ok-ignore.js | node | bin/cmd.js -i 'ok-ignore.js' \
+    || (echo FAIL test/ok-ignore.js; exit 1) || exit 1
+
 echo OK
