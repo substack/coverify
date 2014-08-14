@@ -2,17 +2,26 @@
 
 var fs = require('fs');
 var through = require('through');
-
+var minimatch = require('minimatch');
 var minimist = require('minimist');
 var argv = minimist(process.argv.slice(2), {
     boolean: [ 'q', 'stdout', 't', 'c' ],
-    alias: { o: 'output', q: 'quiet', t: 'total', c: 'color' },
+    string: ['i'],
+    alias: { o: 'output', q: 'quiet', t: 'total', c: 'color', i: 'ignore' },
     default: { q: false, t: true, c: process.stderr.isTTY }
 });
 
 var vargv = minimist(process.argv.slice(2));
 if (argv.q && (vargv.total === undefined && vargv.t === undefined)) {
     argv.total = argv.t = false;
+}
+
+var ignore_pattern;
+if (argv.i) {
+  ignore_pattern = argv.i;
+}
+if (argv.ignore) {
+  ignore_pattern = argv.ignore;
 }
 
 if (argv.h || argv.help) {
@@ -39,6 +48,14 @@ process.on('exit', function (code) {
 });
 
 var parser = parse(function (err, sources, counts) {
+    if (ignore_pattern) {
+      Object.keys(sources).forEach(function (file) {
+        if (minimatch(file, ignore_pattern, {matchBase: true})) {
+          delete sources[file];
+          delete counts[file];
+        }
+      });
+    }
     if (err) {
         console.error(err);
         process.exit(1);

@@ -1,5 +1,6 @@
 var falafel = require('falafel');
 var through = require('through');
+var minimatch = require('minimatch');
 
 module.exports = function (file, opts) {
     if (typeof file === 'object') {
@@ -8,7 +9,11 @@ module.exports = function (file, opts) {
     }
     if (!opts) opts = {};
     var outputFn = opts.output || 'console.log';
-    
+    if (opts.ignore) {
+        if (minimatch(file, opts.ignore, {matchBase: true})) {
+            return through.obj();
+        };
+    };
     var output = through();
     var expected = [];
     
