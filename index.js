@@ -1,5 +1,6 @@
 var falafel = require('falafel');
 var through = require('through');
+var minimatch = require('minimatch');
 
 module.exports = function (file, opts) {
     if (typeof file === 'object') {
