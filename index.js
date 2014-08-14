@@ -10,9 +10,9 @@ module.exports = function (file, opts) {
     if (!opts) opts = {};
     var outputFn = opts.output || 'console.log';
     if (opts.ignore) {
-        if (minimatch(file, ignore_pattern, {matchBase: true})) {
+        if (minimatch(file, opts.ignore, {matchBase: true})) {
             return through.obj();
-        }
+        };
     };
     var output = through();
     var expected = [];
