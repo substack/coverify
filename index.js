@@ -30,6 +30,12 @@ module.exports = function (file, opts) {
             return;
         }
 
+        if (! file.match(/\.js$/)) {
+            this.queue(body);
+            this.queue(null);
+            return;
+        }
+
         try { var src = falafel(body, walk) + '' }
         catch (err) { return onerror(err, file,body) }
         var sfile = JSON.stringify(JSON.stringify(file));
