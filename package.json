@@ -15,6 +15,8 @@
   },
   "devDependencies": {
     "browserify": "~3.4.1",
+    "handlebars": "^2.0.0",
+    "hbsfy": "^2.2.0",
     "tape": "~2.3.2"
   },
   "repository": {

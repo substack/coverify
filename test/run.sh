@@ -14,4 +14,7 @@ browserify test/fail-delete | node | bin/cmd.js \
 browserify test/fail-scope | node | bin/cmd.js \
     && echo FAIL test/fail-scope && exit 1
 
+browserify -t hbsfy test/ignore-transform.js | node | bin/cmd.js \
+    && echo FAIL test/ignore-transform.js && exit 1
+
 echo OK
