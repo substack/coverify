@@ -78,7 +78,7 @@ module.exports = function (file, opts) {
         || node.type === 'VariableDeclaration')
         && node.parent.type !== 'ForStatement'
         && node.parent.type !== 'ForInStatement') {
-            var s = '{ __coverageWrap(' + index + ');' + node.source() + '}';
+            var s = '{ __coverageWrap(' + index + ');' + node.source() + '\n}';
             if (node.parent.type === 'IfStatement') {
                 node.update(s);
             }
