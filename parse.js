@@ -32,7 +32,13 @@ module.exports = function (cb) {
         }, []);
         
         var missed = Object.keys(files).reduce(function (acc, file) {
+            var seen = {};
             acc[file] = files[file].filter(Boolean).filter(function (mr) {
+                var key = mr.join('-');
+                if (seen.hasOwnProperty(key)) {
+                    return false;
+                }
+                seen[key] = true;
                 return !ranges.some(function (rr) {
                     return (mr[0] > rr[0] && mr[1] < rr[1])
                         || (mr[0] === rr[0] && mr[1] < rr[1])
