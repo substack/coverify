@@ -9,7 +9,6 @@ module.exports = function (file, opts) {
     if (!opts) opts = {};
     var outputFn = opts.output || 'console.log';
     
-    var output = through();
     var expected = [];
     
     var chunks = [];
