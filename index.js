@@ -1,5 +1,7 @@
 var falafel = require('falafel');
 var through = require('through');
+var sourceMap = require('source-map');
+var convertSourceMap = require('convert-source-map');
 
 module.exports = function (file, opts) {
     if (typeof file === 'object') {
@@ -29,9 +31,45 @@ module.exports = function (file, opts) {
             return;
         }
 
-        try { var src = falafel(body, walk) + '' }
+        try { var src = falafel(body, { loc: true }, walk) + '' }
         catch (err) { return onerror(err, file,body) }
         var sfile = JSON.stringify(JSON.stringify(file));
+
+        var origBody = body;
+        var bodySourceMap = convertSourceMap.fromSource(body);
+        if (bodySourceMap && bodySourceMap.sourcemap.mappings) {
+            bodySourceMap = new sourceMap.SourceMapConsumer(bodySourceMap.sourcemap);
+            origBody = bodySourceMap.sourceContentFor(file);
+            function originalLoc (loc) {
+                var pos = bodySourceMap.originalPositionFor(loc);
+                if (pos.line && pos.column) {
+                    return { line: pos.line, column: pos.column };
+                }
+            }
+            expected = expected.map(function (loc) {
+                var origStart = originalLoc(loc.start);
+                var origEnd = originalLoc(loc.end);
+                if (origStart && origEnd) {
+                    return { start: originalLoc(loc.start), end: originalLoc(loc.end) };
+                }
+                else return false;
+            });
+        }
+
+        var lines = origBody.split('\n');
+        var lineOffsets = [];
+        var offset = 0;
+        for (var i = 0; i < lines.length; i++) {
+            lineOffsets[i] = offset;
+            offset += lines[i].length + 1;
+        }
+        expected = expected.map(function(loc) {
+            if (!loc) return false;
+            return [
+                lineOffsets[loc.start.line - 1] + loc.start.column,
+                lineOffsets[loc.end.line - 1] + loc.end.column
+            ];
+        });
         
         this.queue(
             outputFn + '("COVERAGE " + ' + sfile + ' + " " + '
@@ -58,7 +96,7 @@ module.exports = function (file, opts) {
     function walk (node) {
         var index = expected.length;
         if (node.type === 'VariableDeclarator' && node.init) {
-            expected.push(node.init.range);
+            expected.push(node.init.loc);
             node.init.update(
                 '(__coverageWrap(' + index + ')('
                 + node.init.source() + '))'
@@ -71,7 +109,7 @@ module.exports = function (file, opts) {
         && (node.type !== 'MemberExpression'
             || node.parent.type !== 'CallExpression'
         )) {
-            expected.push(node.range);
+            expected.push(node.loc);
             node.update('(__coverageWrap(' + index + ')(' + node.source() + '))');
         }
         else if ((node.type === 'ExpressionStatement'
@@ -83,12 +121,12 @@ module.exports = function (file, opts) {
                 node.update(s);
             }
             else node.update(s + ';');
-            expected.push(node.range);
+            expected.push(node.loc);
         }
         else if (node.type === 'ReturnStatement') {
             node.update('return __coverageWrap(' + index + ')(function () {'
                 + node.source() + '}).apply(this, [].slice.call(arguments));');
-            expected.push(node.range);
+            expected.push(node.loc);
         }
     }
     

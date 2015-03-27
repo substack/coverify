@@ -16,7 +16,7 @@ module.exports = function (cb) {
             var file = m[1], ranges = m[2];
             if (/^"/.test(file) && /"$/.test(file)) file = JSON.parse(file);
             files[file] = JSON.parse(ranges);
-            original[file] = JSON.parse(ranges);
+            original[file] = JSON.parse(ranges).filter(Boolean);
         }
         else if (m = /^COVERED\s+("[^"]+"|\S+)\s+(\S+)/.exec(line)) {
             var file = m[1], index = m[2];
