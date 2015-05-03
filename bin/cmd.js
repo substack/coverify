@@ -129,7 +129,7 @@ var parser = parse(function (err, sources, counts) {
     }
 });
 
-if (argv.stdout || !argv.q || (vargv.q === undefined && argv.json)) {
+if (argv.stdout || !argv.quiet) {
     parser.pipe(process.stdout);
 }
 process.stdin.pipe(parser);
