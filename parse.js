@@ -1,6 +1,6 @@
-var split = require('split');
-var through = require('through');
-var combine = require('stream-combiner');
+var split = require('split2');
+var through = require('through2');
+var combine = require('stream-combiner2');
 var fs = require('fs');
 
 module.exports = function (cb) {
@@ -10,7 +10,7 @@ module.exports = function (cb) {
     
     return combine(split(), through(write, end));
 
-    function write (line) {
+    function write (line, enc, next) {
         var m;
         if (m = /^COVERAGE\s+("[^"]+"|\S+)\s+(\S+)/.exec(line)) {
             var file = m[1], ranges = m[2];
@@ -23,7 +23,8 @@ module.exports = function (cb) {
             if (/^"/.test(file) && /"$/.test(file)) file = JSON.parse(file);
             delete files[file][index];
         }
-        else this.queue(line + '\n');
+        else this.push(line + '\n');
+        next();
     }
     
     function end () {
