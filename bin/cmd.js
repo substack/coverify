@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 
 var fs = require('fs');
-var through = require('through');
 
 var minimist = require('minimist');
 var argv = minimist(process.argv.slice(2), {
