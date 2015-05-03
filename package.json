@@ -7,17 +7,15 @@
     "coverify": "bin/cmd.js"
   },
   "dependencies": {
-    "convert-source-map": "~1.0.0",
-    "falafel": "~0.3.1",
-    "minimist": "~0.0.5",
+    "convert-source-map": "^1.1.0",
+    "falafel": "^1.0.1",
+    "minimist": "^1.1.1",
     "source-map": "~0.4.2",
-    "split": "~0.2.10",
-    "stream-combiner": "~0.0.2",
-    "through": "~2.3.4"
+    "through2": "~0.6.5"
   },
   "devDependencies": {
-    "browserify": "~3.4.1",
-    "tape": "~2.3.2"
+    "browserify": "^10.0.0",
+    "tape": "^4.0.0"
   },
   "repository": {
     "type": "git",
@@ -44,8 +42,12 @@
     "files": "test/ok.js",
     "browsers": [
       "ie/8..latest",
-      "firefox/3.5", "firefox/latest", "firefox/nightly",
-      "chrome/10", "chrome/latest", "chrome/canary",
+      "firefox/3.5",
+      "firefox/latest",
+      "firefox/nightly",
+      "chrome/10",
+      "chrome/latest",
+      "chrome/canary",
       "opera/12..latest",
       "opera/next",
       "safari/5.1..latest",

@@ -1,5 +1,5 @@
 var falafel = require('falafel');
-var through = require('through');
+var through = require('through2');
 var sourceMap = require('source-map');
 var convertSourceMap = require('convert-source-map');
 
@@ -17,7 +17,7 @@ module.exports = function (file, opts) {
     var stream = through(write, end);
     return stream;
     
-    function write (buf) { chunks.push(buf) }
+    function write (buf, enc, next) { chunks.push(buf); next() }
     
     function end () {
         var body = Buffer.concat(chunks)
@@ -26,12 +26,12 @@ module.exports = function (file, opts) {
         ;
 
         if (file.match(/\.json$/)) {
-            this.queue('module.exports=' + body);
-            this.queue(null);
+            this.push('module.exports=' + body);
+            this.push(null);
             return;
         }
 
-        try { var src = falafel(body, { loc: true }, walk) + '' }
+        try { var src = falafel(body, { locations: true }, walk) + '' }
         catch (err) { return onerror(err, file,body) }
         var sfile = JSON.stringify(JSON.stringify(file));
 
@@ -71,7 +71,7 @@ module.exports = function (file, opts) {
             ];
         });
         
-        this.queue(
+        this.push(
             outputFn + '("COVERAGE " + ' + sfile + ' + " " + '
                 + JSON.stringify(JSON.stringify(expected))
             + ');'
@@ -89,8 +89,8 @@ module.exports = function (file, opts) {
             + '};\n'
         );
         
-        this.queue(src);
-        this.queue(null);
+        this.push(src);
+        this.push(null);
     }
     
     function walk (node) {
