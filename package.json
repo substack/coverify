@@ -11,6 +11,9 @@
     "falafel": "^1.0.1",
     "minimist": "^1.1.1",
     "source-map": "~0.4.2",
+    "split": "^0.3.3",
+    "stream-combiner": "^0.2.1",
+    "through": "^2.3.7",
     "through2": "~0.6.5"
   },
   "devDependencies": {
