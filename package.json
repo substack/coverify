@@ -10,6 +10,7 @@
     "convert-source-map": "^1.1.0",
     "falafel": "^1.0.1",
     "minimist": "^1.1.1",
+    "slash": "^1.0.0",
     "source-map": "~0.4.2",
     "split2": "^0.2.1",
     "stream-combiner2": "^1.0.2",

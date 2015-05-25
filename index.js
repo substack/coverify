@@ -2,6 +2,7 @@ var falafel = require('falafel');
 var through = require('through2');
 var sourceMap = require('source-map');
 var convertSourceMap = require('convert-source-map');
+var slash = require('slash');
 
 module.exports = function (file, opts) {
     if (typeof file === 'object') {
@@ -40,7 +41,7 @@ module.exports = function (file, opts) {
         var bodySourceMap = convertSourceMap.fromSource(body);
         if (bodySourceMap && bodySourceMap.sourcemap.mappings) {
             bodySourceMap = new sourceMap.SourceMapConsumer(bodySourceMap.sourcemap);
-            origBody = bodySourceMap.sourceContentFor(file);
+            origBody = bodySourceMap.sourceContentFor(slash(file));
             function originalLoc (loc) {
                 var pos = bodySourceMap.originalPositionFor(loc);
                 if (pos.line && pos.column) {
