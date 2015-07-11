@@ -82,12 +82,23 @@ module.exports = function (file, opts) {
                 acc[ix] = x;
                 return acc;
             }, {})) + ';'
+            + 'var __coverageFunction=Function;'
+            + 'Function=function(){'
+                 + 'var a=[].slice.call(arguments);'
+                 + 'a.splice(-1, 0, "__coverageWrap");'
+                 + 'var f=__coverageFunction.apply(this, a);'
+                 + 'return function(){'
+                    + 'var b=[].slice.call(arguments);'
+                    + 'b.push(__coverageWrap);'
+                    + 'return f.apply(this, b);'
+                 + '}'
+            + '};'
             + 'var __coverageWrap = function (index) {'
-            + 'if (__coverage[index]) ' + outputFn
-                + '("COVERED " + ' + sfile
-                + ' + " " + index);'
-            + 'delete __coverage[index];'
-            + 'return function (x) { return x }'
+                + 'if (__coverage[index]) ' + outputFn
+                    + '("COVERED " + ' + sfile
+                    + ' + " " + index);'
+                + 'delete __coverage[index];'
+                + 'return function (x) { return x }'
             + '};\n'
         );
         
