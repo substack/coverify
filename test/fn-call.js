@@ -1,5 +1,4 @@
 var test = require('tape');
-var pkg = require('./package.json');
 var call = Function.prototype.call;
 
 test('Function.prototype.call', function (t) {

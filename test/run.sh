@@ -8,6 +8,9 @@ browserify test/ok-trailing-comment.js \
 browserify test/fn-call.js | node | bin/cmd.js \
     || (echo FAIL test/fn-call; exit 1) || exit 1
 
+browserify test/fn-src | node | bin/cmd.js \
+    || (echo FAIL test/fn-src; exit 1) || exit 1
+
 browserify test/fail.js | node | bin/cmd.js \
     && echo FAIL test/fail.js && exit 1
 
