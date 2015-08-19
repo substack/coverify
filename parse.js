@@ -3,11 +3,11 @@ var through = require('through2');
 var combine = require('stream-combiner2');
 var fs = require('fs');
 
-module.exports = function (cb) {
+module.exports = function (cb, origFileContents) {
     var files = {};
     var counts = {};
     var original = {};
-    
+
     return combine(split(), through(write, end));
 
     function write (line, enc, next) {
@@ -26,12 +26,12 @@ module.exports = function (cb) {
         else this.push(line + '\n');
         next();
     }
-    
+
     function end () {
         var ranges = Object.keys(files).reduce(function (acc, file) {
             return acc.concat(files[file].filter(Boolean));
         }, []);
-        
+
         var missed = Object.keys(files).reduce(function (acc, file) {
             var seen = {};
             acc[file] = files[file].filter(Boolean).filter(function (mr) {
@@ -49,7 +49,7 @@ module.exports = function (cb) {
             });
             return acc;
         }, {});
-        
+
         var counts = Object.keys(files).reduce(function (acc, file) {
             acc[file] = {
                 expr: original[file].length - missed[file].length,
@@ -57,16 +57,17 @@ module.exports = function (cb) {
             };
             return acc;
         }, {});
-        
+
         var sources = {};
         var pending = 0;
         Object.keys(missed).forEach(function (file) {
             pending ++;
             sources[file] = {};
-            
-            fs.readFile(file, 'utf8', function (err, src) {
+
+            function parseFileContent(err, src) {
+
                 if (err) return cb(err);
-                
+
                 var lines = src.split('\n');
                 function findLine (r) {
                     var c = 0;
@@ -74,7 +75,7 @@ module.exports = function (cb) {
                     for (var i = 0; i < lines.length; i++) {
                         c += lines[i].length + 1;
                         if (c < r[0]) continue;
-                        
+
                         var row = { line: lines[i] };
                         row.range = [ 0, lines[i].length - 1 ];
                         if (mlines.length === 0) {
@@ -84,7 +85,7 @@ module.exports = function (cb) {
                             row.range[1] = r[1] - c + lines[i].length;
                         }
                         mlines.push(row);
-                        
+
                         if (c > r[1]) break;
                     }
                     var offset =  c - lines[i].length;
@@ -95,7 +96,7 @@ module.exports = function (cb) {
                         range: lr
                     };
                 }
-                
+
                 sources[file] = [];
                 missed[file].forEach(function (range) {
                     var match = findLine(range);
@@ -109,9 +110,15 @@ module.exports = function (cb) {
                     });
                 });
                 next();
-            });
+            }
+
+            if (origFileContents && origFileContents.hasOwnProperty(file)) {
+                parseFileContent(null, origFileContents[file]);
+            } else {
+                fs.readFile(file, 'utf8', parseFileContent);
+            }
         });
-        
+
         function next () {
             if (--pending === 0) {
                 cb(null, sources, counts);
