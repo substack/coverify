@@ -8,7 +8,7 @@
   },
   "dependencies": {
     "convert-source-map": "^1.1.0",
-    "falafel": "^1.0.1",
+    "falafel": "^2.1.0",
     "minimist": "^1.1.1",
     "slash": "^1.0.0",
     "source-map": "~0.4.2",

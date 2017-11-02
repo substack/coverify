@@ -32,7 +32,10 @@ module.exports = function (file, opts) {
             return;
         }
         
-        var fopts = { locations: true, ecmaVersion: 6 };
+        var fopts = {
+            locations: true,
+            ecmaVersion: opts.ecmaVersion || 9
+        };
         try { var src = falafel(body, fopts, walk) + '' }
         catch (err) { return onerror(err, file,body) }
         var sfile = JSON.stringify(JSON.stringify(file));
