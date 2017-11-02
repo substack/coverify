@@ -1,6 +1,6 @@
 {
   "name": "coverify",
-  "version": "1.4.1",
+  "version": "1.5.0",
   "description": "code coverage browserify transform",
   "main": "index.js",
   "bin": {
