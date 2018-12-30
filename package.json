@@ -25,7 +25,8 @@
     "url": "git://github.com/substack/coverify.git"
   },
   "scripts": {
-    "test": "test/run.sh"
+    "tests-only": "test/run.sh",
+    "test": "npm run tests-only"
   },
   "homepage": "https://github.com/substack/coverify",
   "keywords": [
