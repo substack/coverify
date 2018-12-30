@@ -1,3 +1,5 @@
+'use strict';
+
 module.exports = function (cb) {
     var i = 0;
     var iv = setInterval(function () {

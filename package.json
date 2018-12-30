@@ -17,7 +17,9 @@
     "through2": "~0.6.5"
   },
   "devDependencies": {
+    "@ljharb/eslint-config": "^13.1.1",
     "browserify": "^16.2.3",
+    "eslint": "^5.11.1",
     "tape": "^4.9.2"
   },
   "repository": {
@@ -26,11 +28,13 @@
   },
   "scripts": {
     "tests-only": "test/run.sh",
+    "pretest": "npm run lint",
     "test": "npm run tests-only",
     "posttest": "npm run audit",
     "preaudit": "npm install --package-lock --package-lock-only",
     "audit": "npm audit",
-    "postaudit": "rm package-lock.json"
+    "postaudit": "rm package-lock.json",
+    "lint": "eslint ."
   },
   "homepage": "https://github.com/substack/coverify",
   "keywords": [

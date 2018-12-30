@@ -1,0 +1,34 @@
+{
+    "root": true,
+
+    "extends": "@ljharb",
+
+    "env": {
+        "node": true,
+    },
+
+    "rules": {
+        "array-bracket-newline": 0,
+        "array-bracket-spacing": 0,
+        "complexity": 0,
+        "consistent-return": 1,
+        "func-style": 0,
+        "id-length": 0,
+        "indent": [2, 4],
+        "max-len": 0,
+        "max-lines-per-function": 0,
+        "max-nested-callbacks": 0,
+        "max-params": 0,
+        "max-statements": 0,
+        "max-statements-per-line": 0,
+        "no-invalid-this": 1,
+        "no-magic-numbers": 0,
+        "no-param-reassign": 1,
+        "no-plusplus": 0,
+        "no-shadow": 1,
+        "no-use-before-define": 1,
+        "object-curly-newline": 0,
+        "operator-linebreak": 1,
+        "sort-keys": 0,
+    }
+}

@@ -1,5 +1,5 @@
-var o = { p : 1 };
+var o = { p: 1 };
 delete o.p;
-if (o.hasOwnProperty('p')) {
+if (Object.prototype.hasOwnProperty.call(o, 'p')) {
     throw new Error('delete broke');
 }

@@ -1,10 +1,10 @@
 var test = require('tape');
-var pkg = require('./package.json');
 
 test('not covered', function (t) {
     t.plan(3);
-    
+
     forEach([ 10, 5, 24 ], function (n) {
+        /* eslint-disable */
         var sum = 0;
         for (var i = 0; i <= n; i++) {
             if (i > 30) unreachable(
@@ -12,25 +12,25 @@ test('not covered', function (t) {
             ); var z = 3;
             sum += i;
         }
-        t.equal(sum, (n * (n+1)) / 2);
+        t.equal(sum, (n * (n + 1)) / 2);
     });
 });
 
 test('whatever', whatever);
 
-function whatever (t) {
+function whatever(t) {
     t.plan(1);
-    t.throws(function () {
+    t['throws'](function () {
         (function () {
             return undefined;
             whaaaaa();
             beep('boop');
-        })().blah
+        }()).blah;
     });
 }
 
-function forEach (xs, f) {
-    if (xs.forEach) return xs.forEach(f);
+function forEach(xs, f) {
+    if (xs.forEach) { return xs.forEach(f); }
     for (var i = 0; i < xs.length; i++) {
         f(xs[i], i);
     }
